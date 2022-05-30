@@ -1,0 +1,1 @@
+[Errno 13] Permission denied: 'E:\\中期故障类型及其数据\\中期故障类型及其数据\\DIDR类型\\SaPDU长度错误'
