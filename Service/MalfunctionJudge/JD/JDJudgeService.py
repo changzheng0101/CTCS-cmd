@@ -135,7 +135,7 @@ class JDJudgeService(BaseJudgeService):
                     if '10 00 00 ' in data_value or '10 00 00' in data_value:
                         for APDU_index in range(len(NID_MESSAGE_list)-1, -1, -1):
                             if int(NID_MESSAGE_list[APDU_index]) < 100:
-                                if (parse(PRI_time_value.replace('. ', '.'))-parse(PRI_APDU_time_value[APDU_index].replace('. ', '.'))).seconds > json_data[RBC_NoApplicationLayer_Time]:
+                                if(parse(PRI_time_value.replace('. ', '.'))-parse(PRI_APDU_time_value[APDU_index].replace('. ', '.'))).seconds > json_data[RBC_NoApplicationLayer_Time]:
                                     Update_db = 'RBC不发应用层消息'
                                     break
                                 if (parse(PRI_time_value.replace('. ', '.')) - parse(PRI_APDU_time_value[APDU_index].replace('. ', '.'))).seconds <= json_data[RBC_NoApplicationLayer_Time]:

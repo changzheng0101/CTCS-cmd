@@ -380,23 +380,23 @@ class TKAIService:
                 pri_xxlx_1 = str(df.loc[i, 'PRI_信令类型_1'])
                 pri_zlx_1 = str(df.loc[i, 'PRI_子类型_1'])
                 pri_cfsj_1 = str(df.loc[i, 'PRI_触发时间_1'])
-                if 'V.110' in pri_xxlx_1:  # 存在V.110失步
+                if 'V.110失步' in pri_xxlx_1:  # 存在V.110失步
                     v110.append(i)
                     time_v110.append(pri_cfsj_1)
                     dire_v110.append(str(df.loc[i, 'PRI_数据传送方向_1']))
                     tk_PRI_rowNum.append(i + 1)
-                if 'DISC' in pri_zlx_1:  # 存在DISCONNECT
+                if 'DISC' in pri_xxlx_1 or 'DISCONNECT' in pri_xxlx_1:  # 存在DISCONNECT
                     disc.append(i)
                     time_disc.append(pri_cfsj_1)
                     tk_PRI_rowNum.append(i + 1)
-                # 判断二者时间相关度
-                if len(v110) != 0 and len(disc) != 0:
-                    for ii in range(len(time_v110)):
-                        for ij in range(len(time_disc)):
-                            a = time_xiangguan(time_v110[ii], time_disc[ij], 5)
-                            if a == 1:
-                                a_xiangguan.append(ii)
-                                break
+            # 判断二者时间相关度
+            if len(v110) != 0 and len(disc) != 0:
+                for ii in range(len(time_v110)):
+                    for ij in range(len(time_disc)):
+                        a = time_xiangguan(time_v110[ii], time_disc[ij], 5)
+                        if a == 1:
+                            a_xiangguan.append(ii)
+                            break
             if len(a_xiangguan) != 0:
                 print('由于发生V.110失步导致DISCONNECT，1')
                 TKTZ.append('由于发生V.110失步导致DISCONNECT')
@@ -510,11 +510,14 @@ class TKAIService:
                     if len(regex_result) != 0:
                         time_data_str = k_second_before_time_data[index_CBU_to_RBC]
                         time_data_all.append(time_data_str)
-                NR_value_max = max(final_result, key=final_result.count)
-                NR_maxNum_time = []
-                for final_result_index in range(len(final_result)):
-                    if final_result[final_result_index] == NR_value_max:
-                        NR_maxNum_time.append(time_data_all[final_result_index])
+                if len(final_result) != 0:
+                    NR_value_max = max(final_result, key=final_result.count)
+                    NR_maxNum_time = []
+                    for final_result_index in range(len(final_result)):
+                        if final_result[final_result_index] == NR_value_max:
+                            NR_maxNum_time.append(time_data_all[final_result_index])
+                else:
+                    NR_maxNum_time = []
                 if len(NR_maxNum_time) != 0:
                     if (parse('.'.join(NR_maxNum_time[-1].rsplit(" ", 1))) - parse('.'.join(NR_maxNum_time[0].rsplit(" ", 1)))).seconds > json_data[NR_Time]:
                         T1_e = 1
@@ -648,3 +651,5 @@ class TKAIService:
 
 
             return tktz, TKTZ, A_time_dire, tk_PRI_rowNum, tk_Abis_rowNum, tk_PRI_infodes, tk_Abis_infodes
+
+# TKAIService().SearchEigenvalues(r"C:\Users\zhu\Documents\GitHub\CTCS\GUI\data\excel_time\G1714-202008145532-Data+_to_.xls",'铁科')

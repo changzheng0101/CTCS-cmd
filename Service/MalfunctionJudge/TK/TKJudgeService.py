@@ -93,7 +93,8 @@ class TKJudgeService(BaseJudgeService):
                     if len(regex_result) == 0:
                         regex_result = re.findall(regex2, type_value)
                     NID_MESSAGE_list += regex_result
-                    PRI_APDU_time_value.append(PRI_time_value)
+                    if len(regex_result) != 0:
+                        PRI_APDU_time_value.append(PRI_time_value)
 
                 if PRI_dire_value == 'OBC->RBC':
                     OBCtoRBCValue1 = single_excel.cell_value(row, self.getColumnIndex(single_excel, 'PRI_OBC->RBC_1'))
@@ -146,7 +147,7 @@ class TKJudgeService(BaseJudgeService):
                         if Update_db == 'RBC不发应用层消息':
                             Update_db = '不明原因'
                             break
-                        if int(NID_MESSAGE_list[-1]) != 39 or ( int(NID_MESSAGE_list[-1]) == 39 and (parse('.'.join(PRI_time_value.rsplit(" ", 1)))-parse('.'.join(PRI_APDU_time_value[-1].rsplit(" ", 1)))).seconds > json_data[M39_Before_DISCONNECT_Time]):
+                        if int(NID_MESSAGE_list[-1]) != 39 or (int(NID_MESSAGE_list[-1]) == 39 and (parse('.'.join(PRI_time_value.rsplit(" ", 1)))-parse('.'.join(PRI_APDU_time_value[-1].rsplit(" ", 1)))).seconds > json_data[M39_Before_DISCONNECT_Time]):
                             NR_maxNum_time = []
                             NR_before_DI_Time_data = []
                             NR_before_DI_data = []

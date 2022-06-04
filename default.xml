@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CommMsg>
-	<TrainNum>G101</TrainNum>
-	<Happentime>2022-05-29 17:11:51</Happentime>
+	<TrainNum>G838</TrainNum>
+	<Happentime>2022-06-04 21:35:20</Happentime>
 	<Timefirst>0</Timefirst>
 	<Timelast>0</Timelast>
 	<ContentFlag>4</ContentFlag>
-	<TransID>202106222210</TransID>
+	<TransID>35580120200909</TransID>
 	<ReqResult>0</ReqResult>
 </CommMsg>

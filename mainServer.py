@@ -97,11 +97,11 @@ class Query(cmd.Cmd):
         elif ftp_data == '' or ftp_output == '':
             print('请输入ftp文件地址！')
         else:
-            # thread = threading.Thread(target=startServer,
-            #                           args=(IP, port, mysql_username, mysql_passowrd, ftp_data, ftp_output,))
-            # thread.daemon = True
-            # thread.start()
-            startServer(IP, port, mysql_username, mysql_passowrd, ftp_data, ftp_output)
+            thread = threading.Thread(target=startServer,
+                                      args=(IP, port, mysql_username, mysql_passowrd, ftp_data, ftp_output,))
+            thread.daemon = True
+            thread.start()
+            # startServer(IP, port, mysql_username, mysql_passowrd, ftp_data, ftp_output)
             return
 
     def do_query_by_id(self, args):

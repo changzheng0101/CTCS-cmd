@@ -25,7 +25,6 @@ class THJudgeService(BaseJudgeService):
         global Update_db, row1, isChannelSwitch, PRI_time_value
         log_path = './data/unzip/' + '%s' % file_name
         # log_path_1 = './data/excel_time/' + '%s' % file_name_new
-
         # 调用配置文件中的时间
         RBC_NoApplicationLayer_Time = "RBC_NoApplicationLayer_Time"
         DI_Before_Time = "DI_Before_Time"

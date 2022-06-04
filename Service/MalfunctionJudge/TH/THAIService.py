@@ -391,12 +391,12 @@ class THAIService():
                 pri_xxlx_1 = str(df.loc[i, 'PRI_消息类型_1'])
                 pri_zlx_1 = str(df.loc[i, 'PRI_子类型_1'])
                 pri_cfsj_1 = str(df.loc[i, 'PRI_触发时间_1'])
-                if 'V.110' in pri_xxlx_1:  # 存在V.110失步
+                if 'V.110帧失步' in pri_xxlx_1:  # 存在V.110失步
                     v110.append(i)
                     time_v110.append(pri_cfsj_1)
                     dire_v110.append(str(df.loc[i, 'PRI_Direction_1']))
                     th_PRI_rowNum.append(i + 1)
-                if 'DISC' in pri_zlx_1:  # 存在DISCONNECT
+                if 'DISC' in pri_zlx_1 or 'DISCONNECT' in pri_zlx_1:  # 存在DISCONNECT
                     disc.append(i)
                     time_disc.append(pri_cfsj_1)
                     th_PRI_rowNum.append(i + 1)
@@ -518,11 +518,14 @@ class THAIService():
                     if len(regex_result) != 0:
                         time_data_str = k_second_before_time_data[index_CBU_to_RBC]
                         time_data_all.append(time_data_str)
-                NR_value_max = max(final_result, key=final_result.count)
-                NR_maxNum_time = []
-                for final_result_index in range(len(final_result)):
-                    if final_result[final_result_index] == NR_value_max:
-                        NR_maxNum_time.append(time_data_all[final_result_index])
+                if len(final_result) != 0:
+                    NR_value_max = max(final_result, key=final_result.count)
+                    NR_maxNum_time = []
+                    for final_result_index in range(len(final_result)):
+                        if final_result[final_result_index] == NR_value_max:
+                            NR_maxNum_time.append(time_data_all[final_result_index])
+                else:
+                    NR_maxNum_time = []
                 if len(NR_maxNum_time) != 0:
                     if (parse(NR_maxNum_time[-1]) - parse(NR_maxNum_time[0])).seconds > json_data[NR_Time]:
                         T1_e = 1
@@ -667,3 +670,5 @@ class THAIService():
 
 
             return thtz, THTZ, A_time_dire, th_PRI_rowNum, th_Abis_rowNum, th_PRI_infodes, th_Abis_infodes
+
+# THAIService().SearchEigenvalues(r"C:\Users\zhu\Documents\GitHub\CTCS\GUI\data\excel_time\G1273-202008055807-Data+_to_.xls",'通号')
