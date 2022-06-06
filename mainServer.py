@@ -18,7 +18,7 @@ warnings.filterwarnings("ignore")
 class Query(cmd.Cmd):
     DATA_PATH = "./data"
     intro = '*****************************************\n'\
-            '   CTCS-3级列控系统故障运维服务端v5.1    \n'\
+            '   CTCS-3级列控系统故障运维服务端v5.2    \n'\
             '*****************************************\n'\
             '输入 help 或者 ? 查看所有命令。\n' \
             'help + 命令 可查看命令具体解释'
