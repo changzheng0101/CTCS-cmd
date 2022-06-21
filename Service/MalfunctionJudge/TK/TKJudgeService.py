@@ -67,6 +67,7 @@ class TKJudgeService(BaseJudgeService):
         regex1 = r"(\d\d\d)"
         regex2 = r"(\d\d)"
         if Update_db == '不明原因':
+            NumOfM39 = 0
             for row in range(1, row_length):
                 type_value = single_excel.cell_value(row, self.getColumnIndex(single_excel, 'PRI_子类型_1'))
                 data_value = single_excel.cell_value(row, self.getColumnIndex(single_excel, 'PRI_数据内容_1'))
@@ -148,6 +149,7 @@ class TKJudgeService(BaseJudgeService):
                             Update_db = '不明原因'
                             break
                         if int(NID_MESSAGE_list[-1]) != 39 or (int(NID_MESSAGE_list[-1]) == 39 and (parse('.'.join(PRI_time_value.rsplit(" ", 1)))-parse('.'.join(PRI_APDU_time_value[-1].rsplit(" ", 1)))).seconds > json_data[M39_Before_DISCONNECT_Time]):
+                            NumOfM39 = NumOfM39 + 1
                             NR_maxNum_time = []
                             NR_before_DI_Time_data = []
                             NR_before_DI_data = []
@@ -164,7 +166,9 @@ class TKJudgeService(BaseJudgeService):
                             # 判断第一时间与最后一个时间是否小于6秒
                             if (parse('.'.join(NR_maxNum_time[0].rsplit(" ", 1))) - parse('.'.join(NR_maxNum_time[-1].rsplit(" ", 1)))).seconds < json_data[NR_Time]:
                                 Update_db = '安全层MAC'
-
+                        if NumOfM39 == 0:
+                            Update_db = '没有故障类型'
+                            break
                         if Update_db == '安全层MAC':
                             time_direc_tab.append(
                                 '该故障类型为安全层MAC类型，触发时间：' + PRI_time_value + '；触发方向：' + PRI_dire_value + '\n')
@@ -181,7 +185,8 @@ class TKJudgeService(BaseJudgeService):
                 else:
                     Update_db = '不明原因'
 
-            if Update_db != '不明原因':
+
+            if Update_db != '不明原因' and Update_db != '没有故障类型':
                 df = pd.read_excel(excel_inputpath)
                 disc = []
                 disc_time = []
@@ -276,6 +281,9 @@ class TKJudgeService(BaseJudgeService):
                     A_rowNum.append(row)
 
         # 连接分类数据库，存入关键行
+        if Update_db == '没有故障类型':
+            return Update_db, time_direc_tab, isChannelSwitch, PRI_rowNum, Abis_rowNum, A_rowNum
+
         file_name_sql = file_name
         addr = '.\\data\\unzip\\' + file_name
         dirs = os.listdir(addr)

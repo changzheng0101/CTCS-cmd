@@ -64,6 +64,7 @@ class THJudgeService(BaseJudgeService):
         row1 = 1
         regex = r"NID_MESSAGE = (\d*)"
         if Update_db == '不明原因':
+            NumOfM39 = 0
             for row in range(1, row_length):  # 获取对应字段的数据
                 type_value = single_excel.cell_value(row, self.getColumnIndex(single_excel, 'PRI_子类型_1'))
                 data_value = single_excel.cell_value(row, self.getColumnIndex(single_excel, 'PRI_Data_1'))
@@ -149,6 +150,7 @@ class THJudgeService(BaseJudgeService):
                             Update_db = '不明原因'
                             break
                         if int(NID_MESSAGE_list[-1]) != 39 or (int(NID_MESSAGE_list[-1]) == 39 and (parse(PRI_time_value) - parse(PRI_APDU_time_value[-1])).seconds > json_data[M39_Before_DISCONNECT_Time]):
+                            NumOfM39 = NumOfM39 + 1
                             NR_maxNum_time = []
                             NR_before_DI_Time_data = []
                             NR_before_DI_data = []
@@ -168,6 +170,9 @@ class THJudgeService(BaseJudgeService):
                                 Update_db = '安全层MAC'
                             else:
                                 Update_db = '不明原因'
+                        if NumOfM39 == 0:
+                            Update_db = '没有故障类型'
+                            break
                         if Update_db == '安全层MAC':
                             time_direc_tab.append(
                                 '该故障类型为安全层MAC类型，触发时间：' + PRI_time_value + '；触发方向：' + PRI_dire_value + '\n')
@@ -199,7 +204,8 @@ class THJudgeService(BaseJudgeService):
             #                     break
 
 
-            if Update_db != '不明原因':
+
+            if Update_db != '不明原因' and Update_db != '没有故障类型':
                 df = pd.read_excel(excel_inputpath)
                 handover1 = []
                 time_command = []
@@ -297,6 +303,9 @@ class THJudgeService(BaseJudgeService):
 
 
         # 连接分类数据库，存入关键行
+        if Update_db == '没有故障类型':
+            return Update_db, time_direc_tab, isChannelSwitch, PRI_rowNum, Abis_rowNum, A_rowNum
+
         file_name_sql = file_name
         addr = '.\\data\\unzip\\' + file_name
         dirs = os.listdir(addr)

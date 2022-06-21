@@ -37,8 +37,10 @@ class KeyWordSearch(object):
                 file_name_new,
                 excel_inputpath,
                 my_model)
-        if error_str != '不明原因':
+        if error_str != '不明原因' and error_str != '没有故障类型':
             return_str.append(file_name + '\n**************************\n   ' + error_str + '\n   ' +isChannelSwitch + '\n   '+time_direc_tab[0].split('；', -1)[1]+'**************************')
+        elif error_str == '没有故障类型':
+            return_str.append(file_name + '\n**************************\n' + '没有故障类型，请进一步人工分析！' + '\n**************************')
         else:
             return_str.append(file_name + '\n**************************\n   ' + error_str + '\n**************************')
         if error_str == 'no data':  # 不属于原因不明，属于没有数据的故障
